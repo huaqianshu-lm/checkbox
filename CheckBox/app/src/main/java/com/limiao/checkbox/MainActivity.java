@@ -11,7 +11,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ListView mListView;
-//    private ListAdapter mListAdapter;
     private MyAdapter mMyAdapter;
     private List<Person> mPersons;
     @Override
@@ -20,21 +19,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mListView = (ListView) findViewById(R.id.lv_aty_main);
         mPersons = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 90; i++) {
             Person person = new Person("aaa","34");
             mPersons.add(person);
         }
-//        mListAdapter = new ListAdapter(this);
         mMyAdapter = new MyAdapter(this);
-//        mListAdapter.setPersons(mPersons);
         mMyAdapter.setPersons(mPersons);
-//        mListView.setAdapter(mListAdapter);
         mListView.setAdapter(mMyAdapter);
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                mListAdapter.setVisibility(true);
-//                mListAdapter.setSelceted(position,true);
                 mMyAdapter.setVisibility(true);
                 return false;
             }

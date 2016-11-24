@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -66,6 +67,12 @@ public class MyAdapter extends BaseAdapter {
         if (mVisibility) {
             holder.mCheckBox.setVisibility(View.VISIBLE);
             final ViewHolder finalHolder = holder;
+
+            /**
+             * 此处要用setOnClickListener,而不是setOnCheckedChangeListener()
+             * 否则会出现混乱的情况
+             */
+
             holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
