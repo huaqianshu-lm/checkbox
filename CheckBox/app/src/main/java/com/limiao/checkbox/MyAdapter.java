@@ -6,25 +6,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.zip.Inflater;
 
 /**
- * Created by limiao on 16/11/23.
+ * Created by limiao on 16/11/24.
  */
 
-public class ListAdapter extends BaseAdapter {
+public class MyAdapter extends BaseAdapter {
     private List<Person> mPersons;
     private Context mContext;
-    private boolean visibility = false;// 记录checkbox是否可见,默认为不可见
+    private boolean mVisibility = false;// checkbox是否显示,默认不显示
 
-    public ListAdapter(Context context) {
+    public MyAdapter(Context context) {
         mContext = context;
+        notifyDataSetChanged();
     }
 
     public void setVisibility(boolean visibility) {
-        this.visibility = visibility;
+        mVisibility = visibility;
         notifyDataSetChanged();
     }
 
@@ -33,10 +36,9 @@ public class ListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-
     @Override
     public int getCount() {
-        return mPersons.size();
+        return mPersons == null ? 0 : mPersons.size();
     }
 
     @Override
@@ -51,40 +53,43 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHoler viewHoler = null;
+        ViewHolder holder = null;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list,parent,false);
-            viewHoler = new ViewHoler(convertView);
-            convertView.setTag(viewHoler);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list, parent, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
         } else {
-            viewHoler = (ViewHoler) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
         Person person = mPersons.get(position);
-        String name = person.getName();
-        String age = person.getAge();
-        viewHoler.mCheckBox.setChecked(person.isChecked());
-        viewHoler.mAgeTv.setText(age);
-        viewHoler.mNameTv.setText(name);
-        if (visibility) {
-            viewHoler.mCheckBox.setVisibility(View.VISIBLE);
-            final ViewHoler finalViewHoler = viewHoler;
-            viewHoler.mCheckBox.setOnClickListener(new View.OnClickListener() {
+        holder.mNameTv.setText(person.getName());
+        holder.mAgeTv.setText(person.getAge());
+        if (mVisibility) {
+            holder.mCheckBox.setVisibility(View.VISIBLE);
+            final ViewHolder finalHolder = holder;
+
+            /**
+             * 此处要用setOnClickListener,而不是setOnCheckedChangeListener()
+             * 否则会出现混乱的情况
+             */
+
+            holder.mCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CheckBox checkBox = (CheckBox) v;
-                    finalViewHoler.mCheckBox.setChecked(checkBox.isChecked());
+                    finalHolder.mCheckBox.setChecked(checkBox.isChecked());
                 }
             });
         }
         return convertView;
     }
 
-    public static class ViewHoler {
+    private static class ViewHolder {
         private TextView mNameTv;
         private TextView mAgeTv;
         private CheckBox mCheckBox;
 
-        public ViewHoler(View view) {
+        public ViewHolder(View view) {
             mNameTv = (TextView) view.findViewById(R.id.tv_item_list_name);
             mAgeTv = (TextView) view.findViewById(R.id.tv_item_list_age);
             mCheckBox = (CheckBox) view.findViewById(R.id.ckb_item_list);
