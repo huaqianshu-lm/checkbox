@@ -7,15 +7,15 @@ package com.limiao.checkbox;
 public class Person  {
     String  name ;
     String age;
-    boolean checked;
-
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
+//    boolean checked;
+//
+//    public boolean isChecked() {
+//        return checked;
+//    }
+//
+//    public void setChecked(boolean checked) {
+//        this.checked = checked;
+//    }
 
     public Person(String name, String age) {
         this.name = name;
